@@ -39,7 +39,7 @@ public class CuentaBancaria {
 		
 		desntino.balance += amount;
 		
-		desntino.agregarTransaccion("Transferencia recibida", amount, "Transferencia desde cuenta "+this.obtenerHistorial());
+		desntino.agregarTransaccion("Transferencia recibida", amount, "Transferencia desde cuenta "+ this.getNumeroCuenta());
 		
 		
 		this.agregarTransaccion("Transferencia realizada", amount, "Enviada a cuenta "+ desntino.getNumeroCuenta());

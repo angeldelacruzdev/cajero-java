@@ -14,8 +14,8 @@ public class Principal {
 			cajero.realizarTransferencia(corriente, 500);
 			cajero.realizarRetiro(4000);
 			cajero.realizarRetiro(3000);
-				
-				
+			cajero.realizarRetiro(500);
+			cajero.realizarRetiro(15000);
 	
 			
 			cajero.mostrarBalance();
