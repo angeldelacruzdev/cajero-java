@@ -1,3 +1,4 @@
+import exceptions.FondosInsuficientesException;
 
 public class CajeroATM {
 	CuentaBancaria cuenta;
@@ -33,12 +34,12 @@ public class CajeroATM {
 		System.out.println("Depósito realizado correctamente.");
 	}
 
-	public void realizarRetiro(double monto) {
+	public void realizarRetiro(double monto) throws FondosInsuficientesException {
 		boolean exito = cuenta.retirar(monto);
 		if (exito) {
 			System.out.println("Retiro realizado.");
 		} else {
-			System.out.println("Fondo insuficientes.");
+			throw new FondosInsuficientesException("Fondos insuficientes.");
 		}
 	}
 

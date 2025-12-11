@@ -8,12 +8,12 @@ public class CuentaAhorro extends CuentaBancaria {
 
 	public CuentaAhorro(String numeroCuenta, double balanceInicial, int pin) {
 		super(numeroCuenta, balanceInicial, pin);
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	@Override
 	public boolean retirar(double monto) {
-		// reset diario
+	 
 		if (!LocalDate.now().equals(fechaUltimoRetiro)) {
 			retiradoHoy = 0;
 			fechaUltimoRetiro = LocalDate.now();

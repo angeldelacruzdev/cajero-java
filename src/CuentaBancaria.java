@@ -2,7 +2,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class CuentaBancaria {
+import exceptions.FondosInsuficientesException;
+import interfaces.Transfer;
+
+public class CuentaBancaria implements Transfer<CuentaBancaria> {
 
 	private final String numeroCuenta;
 	protected double balance;
@@ -18,6 +21,7 @@ public class CuentaBancaria {
 		agregarTransaccion("Apertura: ", balanceInicial, "Cuenta creada");
 	}
 
+	@Override
 	public boolean transfer(CuentaBancaria desntino, double amount) {
 		if (desntino == null) {
 			agregarTransaccion("Transferencia fallida", 0, "Cuenta de destino inválida");
@@ -28,21 +32,22 @@ public class CuentaBancaria {
 			agregarTransaccion("Transferencia fallida", amount, "Monto inválido");
 			return false;
 		}
-		
-		boolean retiroExitoso = this.retirar(amount);
-		
-		if(!retiroExitoso) {
-			agregarTransaccion("Transferencia fallida", amount, "No pudo retirar el monto.");
-			throw new IllegalArgumentException("Transferencia fallida No pudo retirar el monto de "+ amount);
+
+		try {
+			this.retirar(amount);
+		} catch (FondosInsuficientesException e) {
+
+			System.out.println("Error al retirar: " + e.getMessage());
 		}
-		
-		
+
+		double comision = Banco.calcularComision(amount);
 		desntino.balance += amount;
-		
-		desntino.agregarTransaccion("Transferencia recibida", amount, "Transferencia desde cuenta "+ this.getNumeroCuenta());
-		
-		
-		this.agregarTransaccion("Transferencia realizada", amount, "Enviada a cuenta "+ desntino.getNumeroCuenta());
+
+		desntino.agregarTransaccion("Transferencia recibida", amount - comision,
+				"Transferencia desde cuenta " + this.getNumeroCuenta());
+		desntino.agregarTransaccion("Comisión aplicada: ", comision, "  " + this.getNumeroCuenta());
+
+		this.agregarTransaccion("Transferencia realizada", amount, "Enviada a cuenta " + desntino.getNumeroCuenta());
 
 		return true;
 	}
@@ -97,7 +102,7 @@ public class CuentaBancaria {
 		agregarTransaccion("Depósito", monto, "Depósito realizado");
 	}
 
-	public boolean retirar(double monto) {
+	public boolean retirar(double monto) throws FondosInsuficientesException {
 		if (monto <= 0) {
 			throw new IllegalArgumentException("El monto deber ser positivo.");
 		}

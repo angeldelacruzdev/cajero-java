@@ -1,3 +1,4 @@
+import exceptions.FondosInsuficientesException;
 
 public class CuentaCorriente extends CuentaBancaria {
 
@@ -8,7 +9,7 @@ public class CuentaCorriente extends CuentaBancaria {
 	
 	
 	@Override
-	public boolean retirar(double monto) {
+	public boolean retirar(double monto) throws FondosInsuficientesException {
 			
 		if(monto < 0 ) {
 			agregarTransaccion("Retiro fallido", monto, "Monto inválido");
@@ -17,8 +18,8 @@ public class CuentaCorriente extends CuentaBancaria {
 		}
 		
 		if (monto > balance) {
-			agregarTransaccion("Retiro fallido", monto, "Fondos insuficientes");
-			return false;
+			throw new FondosInsuficientesException("Fondo insuficientes");
+			 
 		}
 
 		
